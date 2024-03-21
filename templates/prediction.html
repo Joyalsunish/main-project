@@ -1,0 +1,226 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+   
+    <title>Document</title>
+    <style>
+      
+      
+      body {
+        align-items: center;
+        justify-content: center;
+         background-image: url('https://img.freepik.com/free-photo/chicken-larb-plate-with-dried-chilies-tomatoes-spring-onions-lettuce_1150-27096.jpg?t=st=1711002130~exp=1711005730~hmac=08400368f3b1bd1e419c7d6dbbcc610cb0379069f29b7f3f6e2e54c36a8b660a&w=900');
+         background-size: cover;
+         background-repeat: no-repeat;
+      }
+      
+        .fixed-sidebar {
+    position: fixed;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    transition: margin-left 0.3s;
+  }
+  
+  .fixed-sidebar .nav-link {
+    display: block;
+    padding: 10px;
+    text-align: center;
+    color: #000; /* Adjust the color as needed */
+    text-decoration: none;
+    transition: background-color 0.3s;
+  }
+  
+  .fixed-sidebar .nav-link:hover {
+    background-color: #ddd; /* Adjust the background color on hover */
+  }
+  
+
+
+  .col-md-9 {
+    margin-left: 250px; /* Adjust the left margin based on your sidebar width */
+    transition: margin-left 0.3s;
+  }
+  
+  /* Optional: Add some styling to the links when active or focused */
+  .fixed-sidebar .nav-link.active,
+  .fixed-sidebar .nav-link:focus {
+    background-color: #6b6b6c;
+        color: #fff; /* Adjust the text color for active/focused state */
+  }
+  .card{
+    margin-top: 20px;
+    box-shadow: 3px 3px 5px black;
+padding:5px 5px;
+  }
+ 
+      </style>
+</head>
+<body>
+ 
+  <div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-3 fixed-sidebar" style="background-color: rgb(226 133 9);border: 1px solid;">
+            <div class="sidebar-sticky pt-5">
+              <ul class="nav flex-column">
+                <li style="text-align: center;font-family: cursive; font-size: 30px;">RecipeApp</li>
+
+                <!-- ... other menu items ... -->
+                <li class="nav-item pt-5">
+                  <h5><a class="nav-link text-dark" href="{% url 'home' %}"><i class="fa-solid fa-house" style="color: #00060f;"></i>&nbsp;&nbsp;Home</a></h5>
+                </li>
+                <li class="nav-item">
+                  <form action="{% url 'home' %}" method="post" class="form-inline my-2 my-lg-0">
+                    {% csrf_token %}
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search Recipes" aria-label="Search" name="search">
+                    <button style="color: black; border:0px;" class="btn btn-outline-primary" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                  </form>
+                </li>
+                <li class="nav-item pt-5">
+                  <h5><a class="nav-link text-dark" href="{% url 'viewprofile' %}"><i class="fa-solid fa-user"></i>&nbsp;&nbsp;My profile</a></h5>
+                </li>
+                <li class="nav-item pt-5">
+                  <h5><a class="nav-link text-dark" href="{% url 'prediction' %}"><i class="fa-solid fa-carrot"></i>&nbsp;&nbsp;Upload image for prediction</a></h5>
+                </li>
+                <li class="nav-item pt-5">
+                  <h5><a class="nav-link text-dark" href="{% url 'message' %}"><i class="fas fa-envelope"></i> Messages</a></h5>
+                </li>
+                <li class="nav-item pt-5">
+                  <h5><a class="nav-link text-dark" href="{% url 'logout' %}"> Logout</a></h5>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        <!-- Content -->
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+            <!-- Your main content goes here -->
+       
+
+    
+<div class="container mt-5 p-5 alighn-center" style="text-align: center;margin-left: 55px;">
+  
+ <div class="row">
+  <div class="col">
+    <form action="{% url 'prediction' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label" style="color: #fff;">Upload Image</label>
+          <input type="file" class="form-control" aria-describedby="emailHelp" name="preimg">
+        </div>
+        <div class="mb-3">
+    
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+      </div>
+  </div>
+  {% if predicted_class %}
+  <h1>Prediction Result</h1>
+      <h3> {{ predicted_class }}</h3>
+  {% endif %}
+  {% if image_url %}
+      <img src="{{ image_url }}" alt="Uploaded Image" style="max-width: 400px; max-height: 400px; margin-left: 350px;">
+      
+  {% endif %}
+
+  <div class="container alighn-center">
+
+      <div class="row">
+       <div class="col">
+       
+  {% if recipes %}
+  
+  <h3 style="margin-top: 30px;color: #fff;">Recipes with {{ predicted_class }}</h3>
+  <div class="card">
+  {% for recipe in recipes %}
+      <!-- Display recipe information as needed -->
+      <div>
+          <h2>{{ recipe.name }}</h2>
+          <img src="{{ recipe.imageURL }}" alt="{{ i.name }}" width="150" height="150">
+          <p>Ingredients: {{ recipe.ingredient }}</p>
+          <p>Instructions: {{ recipe.instruction }}</p>
+          <!-- Add other fields as needed -->
+      </div>
+  {% endfor %}
+{% else %}
+  <p style="color: #fff;">No recipes found with {{ predicted_class }} as an ingredient.</p>
+{% endif %}
+</div>
+  </div>
+
+  
+  <!-- <div class="col">
+    
+    <div class="card" style="width: 18rem;">
+      <ul class="list-group list-group-flush">
+        {% for i in otheruser %}
+        {% if i.username == 'admin' %}
+        {{pass}}
+        {% else %}
+        <li class="list-group-item">{{ i.username }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          
+            <a href="" class="btn btn-primary">Follow</a>
+         
+        </li> 
+
+        {% endif %}
+
+        
+
+        {% comment %} <li class="list-group-item">Dapibus ac facilisis in</li>
+        <li class="list-group-item">Vestibulum at eros</li> {% endcomment %}
+        {% endfor %}
+      </ul>
+    </div>
+  </div> -->
+    </div>
+    </div>
+    <button class="btn btn-primary d-md-none" type="button" data-toggle="collapse" data-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle Sidebar">
+        <span class="fas fa-bars"></span>
+    </button>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.2/js/bootstrap.min.js"></script>
+    
+    <script>
+      $(document).ready(function () {
+        // Listen for like button clicks
+        $('.like-btn').on('click', function (e) {
+          e.preventDefault();
+    
+          var recipeId = $(this).data('recipe-id');
+          var likeCount = $('.like-count[data-recipe-id="' + recipeId + '"]');
+    
+          // Perform an AJAX request to update the likes
+          if (recipeId) {
+            $.ajax({
+              type: 'GET',
+              url: '{% url "likes" 0 %}'.replace('0', recipeId),
+              success: function (data) {
+                // Update the like count in the HTML
+                likeCount.text(data.likes_count);
+              },
+              error: function (error) {
+                console.error('Error updating likes:', error);
+              }
+            });
+          } else {
+            console.error('Recipe ID is not valid or empty.');
+          }
+        });
+      });
+    </script>
+
+</body>
+</html>
+
+

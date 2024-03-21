@@ -1,0 +1,203 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-GLhlTQ8iUaxlY7p1HvP8sO5BbrJwP9S9VHjwSHG/c5MquX1t2QFAsg5uXKGn1FOb" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-GLhlTQ8iUaxlY7p1HvP8sO5BbrJwP9S9VHjwSHG/c5MquX1t2QFAsg5uXKGn1FOb" crossorigin="anonymous">
+
+    <title>Document</title>
+    <style>
+      .fixed-sidebar {
+  position: fixed;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  background-color: #fff; /* Instagram uses white background */
+  border-right: 1px solid #e6e6e6;
+}
+
+.fixed-sidebar .nav-link {
+  display: block;
+  padding: 10px;
+  text-align: center;
+  color: #000; /* Adjust the color as needed */
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.fixed-sidebar .nav-link:hover {
+  background-color: #ddd; /* Adjust the background color on hover */
+}
+
+.col-md-9 {
+  margin-left: 250px; /* Adjust the left margin based on your sidebar width */
+  transition: margin-left 0.3s;
+  background-color: #fff; /* White background for main content */
+  padding: 20px;
+}
+
+/* Optional: Add some styling to the links when active or focused */
+.fixed-sidebar .nav-link.active,
+.fixed-sidebar .nav-link:focus {
+  background-color: #6b6b6c;
+    color: #fff; /* Adjust the text color for active/focused state */
+}
+.messaging-container {
+            margin-top: 50px;
+        }
+
+        .user-list {
+            height: 100%;
+            border-right: 1px solid #ddd;
+            overflow-y: auto;
+        }
+
+        .message-display {
+            height: 100%;
+            border-left: 1px solid #ddd;
+            overflow-y: auto;
+        }
+
+        #message-container {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        #message-input {
+            width: calc(100% - 22px);
+            margin-right: 10px;
+            border: 1px solid #e6e6e6;
+            padding: 8px;
+        }
+        .container-fluid {
+            padding-right: 0;
+            padding-left: 0;
+        }
+        
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+    </style>
+   
+</head>
+<body>
+ 
+  <div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-2 d-none d-md-block sidebar fixed-sidebar" style="background-color: rgb(249, 246, 242);border: 1px solid;">
+          <div class="sidebar-sticky pt-5">
+            <ul class="nav flex-column">
+              <li style="text-align: center;font-family: cursive; font-size: 30px;">RecipeApp</li>
+
+              <!-- ... other menu items ... -->
+              <li class="nav-item pt-5">
+                <h5><a class="nav-link text-dark" href="{% url 'home' %}"><i class="fa-solid fa-house" style="color: #00060f;"></i>&nbsp;&nbsp;Home</a></h5>
+              </li>
+              <li class="nav-item">
+                <form action="{% url 'home' %}" method="post" class="form-inline my-2 my-lg-0">
+                  {% csrf_token %}
+                  <input class="form-control mr-sm-2" type="search" placeholder="Search Recipes" aria-label="Search" name="search">
+                  <button style="color: black; border:0px;" class="btn btn-outline-primary" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </form>
+              </li>
+              <li class="nav-item pt-5">
+                <h5><a class="nav-link text-dark" href="{% url 'viewprofile' %}"><i class="fa-solid fa-user"></i>&nbsp;&nbsp;My profile</a></h5>
+              </li>
+              <li class="nav-item pt-5">
+                <h5><a class="nav-link text-dark" href="{% url 'prediction' %}"><i class="fa-solid fa-carrot"></i>&nbsp;&nbsp;Upload image for prediction</a></h5>
+              </li>
+              <li class="nav-item pt-5">
+                <h5><a class="nav-link text-dark" href=""><i class="fas fa-envelope"></i> Messages</a></h5>
+              </li>
+              <li class="nav-item pt-5">
+                <h5><a class="nav-link text-dark" href="{% url 'logout' %}"> Logout</a></h5>
+              </li>
+            </ul>
+          </div>
+        </nav>
+
+        <!-- Content -->
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+            <div class="container messaging-container">
+                <!-- Messaging interface -->
+                <div class="row">
+                    <!-- User list (replace with actual users) -->
+                    <div class="col-md-3 user-list">
+                        <h4>Users</h4>
+                        <ul class="list-group">
+                          {% for u in users %}
+                          {% if u.username != "admin" and u != request.user %}
+                              <li class="list-group-item">
+                                  <a href="{% url 'load_content' u.id %}" class="user-link" data-username="{{ u.username }}">{{ u.username }}</a>
+                              </li>
+                          {% endif %}
+                      {% endfor %}
+                        </ul>
+                    </div>
+                    <!-- Message display area -->
+                    <div class="col-md-6 message-display">
+                        <div id="message-container" style="height: 300px; overflow-y: auto; border: 1px solid #ddd; padding: 10px;">
+                          <h4>{{ other_user.username }}</h4>
+                          <hr style="background-color: black;">
+
+                          {% for message in messages %}
+                          
+                          <div>
+                              <strong>{{ message.sender.username }}:</strong>
+                              {% if message.recipe %}
+                                  <img src="{{ message.recipe.imageURL }}" alt="{{ message.recipe.name }}" style="max-width: 100px">
+                              {% else %}
+                                  {{ message.content }}
+                              {% endif %}
+                          </div>
+                      {% endfor %}
+                        </div>
+                        <form method="post" action="{% url 'send_message' %}">
+                          {% csrf_token %}
+                          <input type="hidden" name="recipient" value="{{ other_user.id }}">
+                          <textarea id="message-input" name="content" class="form-control mt-2" placeholder="Type your message"></textarea>
+                          <input type="hidden" name="recipe_id" value="{# You may need to dynamically set this value #}">
+                          <button type="submit" class="btn btn-primary mt-2">Send</button>
+                      </form>
+                     </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+</div>
+
+  
+  
+    </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    
+   
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+   
+  
+   
+</body>
+</html>
